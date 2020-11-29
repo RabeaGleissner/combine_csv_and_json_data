@@ -6,7 +6,10 @@ require_relative 'lib/converter.rb'
 
 combiner = Combiner.new
 converter = Converter.new
-options = ArgsParser.parse(ARGV)
+parser = ArgsParser.new(ARGV)
+
+parser.validate_requested_files
+format = parser.output_format
 
 articles = CSV.open('resources/articles.csv', headers: true).map(&:to_h)
 journals = CSV.open('resources/journals.csv', headers: true).map(&:to_h)
@@ -14,10 +17,10 @@ authors = JSON.parse(File.read('resources/authors.json', headers: true))
 
 output = combiner.combine(articles, journals, authors)
 
-if (options[:format] == 'json')
+if (format == 'json')
   puts converter.to_json(output)
 end
 
-if (options[:format] === 'csv')
+if (format === 'csv')
   puts converter.to_csv(output)
 end
