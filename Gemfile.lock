@@ -1,7 +1,9 @@
 GEM
   remote: https://rubygems.org/
   specs:
+    csv (3.1.9)
     diff-lcs (1.4.4)
+    json (2.3.1)
     rspec (3.10.0)
       rspec-core (~> 3.10.0)
       rspec-expectations (~> 3.10.0)
@@ -20,6 +22,8 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  csv (~> 3.1.9)
+  json (~> 2.3.1)
   rspec (~> 3.10.0)
 
 BUNDLED WITH
