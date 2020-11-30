@@ -2,7 +2,9 @@ class Combiner
   def format_rows(rows)
     rows.map do |row|
       formatted_row = format_keys(row)
-      formatted_row.key?(:issn) && formatted_row[:issn] = fix_issn(formatted_row[:issn])
+      if formatted_row.key?(:issn)
+        formatted_row[:issn] = fix_issn(formatted_row[:issn])
+      end
       formatted_row
     end
   end
