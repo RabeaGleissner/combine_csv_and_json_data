@@ -46,7 +46,7 @@ describe Combiner do
   end
 
   it 'combines author, journals and articles data' do
-    combined_data = [
+    expected_combined_data = [
       {
         doi: '10.1234/altmetric989',
         title: 'Fantastic Concrete Computer',
@@ -71,6 +71,6 @@ describe Combiner do
     ]
 
     output = combiner.combine(articles_data, journals_data, authors_data)
-    expect(output).to eq(combined_data)
+    expect(output).to eq(expected_combined_data)
   end
 end

@@ -19,8 +19,6 @@ output = combiner.combine(articles, journals, authors)
 
 if (format == 'json')
   puts converter.to_json(output)
-end
-
-if (format === 'csv')
+else
   puts converter.to_csv(output)
 end

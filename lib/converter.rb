@@ -1,7 +1,13 @@
 require 'csv'
 require 'json'
 
-CSV_HEADER = ['DOI', 'Article title', 'Author name', 'Journal title', 'Journal ISSN']
+KEYS_WITH_HEADERS = {
+  doi: 'DOI',
+  title: 'Article title',
+  author: 'Author name',
+  journal: 'Journal title',
+  issn: 'Journal ISSN',
+}
 
 class Converter
   def to_json(data)
@@ -10,15 +16,9 @@ class Converter
 
   def to_csv(data)
     CSV.generate do |csv|
-      csv <<  CSV_HEADER
+      csv <<  KEYS_WITH_HEADERS.values
       data.each do |row|
-        ordered_columns = []
-        ordered_columns << row[:doi]
-        ordered_columns << row[:title]
-        ordered_columns << row[:author]
-        ordered_columns << row[:journal]
-        ordered_columns << row[:issn]
-        csv << ordered_columns
+        csv << KEYS_WITH_HEADERS.keys.map {|key| row[key]}
       end
     end
   end

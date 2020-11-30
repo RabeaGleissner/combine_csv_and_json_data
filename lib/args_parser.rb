@@ -11,7 +11,7 @@ class ArgsParser
   end
 
   def validate_requested_files
-    if @files.length != 3 || VALID_FILES.sort != @files.sort
+    unless @files.length == 3 && VALID_FILES.sort == @files.sort
       raise 'Invalid file options given'
     end
   end
@@ -19,12 +19,14 @@ class ArgsParser
   private
 
   def find_files
-    @arguments.reject.with_index{|_, i| (i == @format_flag_index || i == @format_flag_index + 1 )}
+    @arguments.reject.with_index do |_, i|
+      i == @format_flag_index || i == @format_flag_index + 1
+    end
   end
 
   def find_format
     format = @arguments[@format_flag_index + 1]
-    if !['csv', 'json'].include?(format)
+    unless ['csv', 'json'].include?(format)
       raise 'Invalid output format given'
     end
     format

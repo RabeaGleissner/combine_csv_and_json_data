@@ -1,34 +1,28 @@
 class Combiner
+  def format_rows(rows)
+    rows.map do |row|
+      formatted_row = format_keys(row)
+      formatted_row.key?(:issn) && formatted_row[:issn] = fix_issn(formatted_row[:issn])
+      formatted_row
+    end
+  end
+
   def combine(articles_data, journals_data, authors_data)
-    articles = articles_data.map do |row|
-      formatted_row = format_keys(row)
-      formatted_row[:issn] = fix_issn(formatted_row[:issn])
-      formatted_row
-    end
+    articles = format_rows(articles_data)
+    journals = format_rows(journals_data)
+    authors = format_rows(authors_data)
 
-    journals = journals_data.map do |row|
-      formatted_row = format_keys(row)
-      formatted_row[:issn] = fix_issn(formatted_row[:issn])
-      formatted_row
-    end
-
-    authors = authors_data.map do |row|
-      formatted_row = format_keys(row)
-      formatted_row
-    end
-
-    output = articles.map do |article|
+    articles.map do |article|
       article[:journal] = journals.find{|journal| journal[:issn] == article[:issn]}[:title]
       article[:author] = authors.reduce('') do |memo, author|
-        found_doi = author[:articles].find{ |author_article| author_article == article[:doi]}
-        if found_doi
+        matching_doi = author[:articles].find{|author_article| author_article == article[:doi]}
+        if matching_doi
           memo += (memo.empty? ? "#{author[:name]}" : ", #{author[:name]}")
         end
         memo
       end
       article
     end
-    output
   end
 
   def format_keys(row)
@@ -36,6 +30,7 @@ class Combiner
   end
 
   def fix_issn(issn)
-    "#{issn.split(//).first(4).join}-#{issn.split(//).last(4).join}"
+    issn_array = issn.split(//)
+    "#{issn_array.first(4).join}-#{issn_array.last(4).join}"
   end
 end
